@@ -99,7 +99,7 @@
       AFRAME.registerComponent('exit-ar-button', {
       init: function () {
         console.log('exit-ar-button init');
-        document.getElementById('exitbutton').addEventListener('click', ev => {
+        document.getElementById('exitbutton').addEventListener('mousedown', ev => {
             console.log('exit-ar-button event ' + ev.type);
             this.el.sceneEl.renderer.xr.getSession().end();
         });
@@ -135,7 +135,7 @@
                 
         AFRAME.registerComponent("close", {
             init: function () {
-                this.el.addEventListener("click", (e) => {
+                this.el.addEventListener("mousedown", (e) => {
                     eventNamesIndex = -1
                     document.querySelectorAll('.minify').forEach(function (e) {
                         e.object3D.visible = false
@@ -152,7 +152,7 @@
 
         AFRAME.registerComponent("headers", {
             init: function () {
-                this.el.addEventListener("click", (e) => {
+                this.el.addEventListener("mousedown", (e) => {
                     names = headLines
                     console.log("ectNames", ectNames)
                     console.log("ventNames", eventNames)
@@ -176,7 +176,7 @@
 
         AFRAME.registerComponent("spheres", {
             init: function () {
-                this.el.addEventListener("click", (e) => {
+                this.el.addEventListener("mousedown", (e) => {
                     names = ectNames
                     console.log("ectNames", ectNames)
                     console.log("ventNames", eventNames)
@@ -201,7 +201,7 @@
 
         AFRAME.registerComponent("articles", {
             init: function () {
-                this.el.addEventListener("click", (e) => {
+                this.el.addEventListener("mousedown", (e) => {
                     names = objectNames
                     console.log("ectNames", ectNames)
                     console.log("ventNames", eventNames)
@@ -277,7 +277,7 @@
 
         AFRAME.registerComponent("start", {
             init: function () {
-                this.el.addEventListener("click", (e) => {
+                this.el.addEventListener("mousedown", (e) => {
                     eventNamesIndex = 0;
                     document.getElementById('locationA').emit(eventNames[eventNamesIndex]);
                     document.getElementById('locationB').emit(eventNames[eventNamesIndex]);
@@ -297,7 +297,7 @@
 
         AFRAME.registerComponent("next", {
             init: function () {
-                this.el.addEventListener("click", (e) => {
+                this.el.addEventListener("mousedown", (e) => {
                     eventNamesIndex++;
                     if (eventNamesIndex > 7) {
                         eventNamesIndex = 0;
@@ -321,7 +321,7 @@
 
         AFRAME.registerComponent("prev", {
             init: function () {
-                this.el.addEventListener("click", (e) => {
+                this.el.addEventListener("mousedown", (e) => {
                     eventNamesIndex--;
                     if (eventNamesIndex < 0) {
                         eventNamesIndex = 7;
@@ -344,7 +344,7 @@
 
         AFRAME.registerComponent("cyclemenu", {
             init: function () {
-                this.el.addEventListener("click", (e) => {
+                this.el.addEventListener("mousedown", (e) => {
                     eventNamesIndex--;
                     if (eventNamesIndex < 0) {
                         eventNamesIndex = 7;
@@ -437,7 +437,7 @@
                         VR_LOG('catbella')
 
                     });
-                    this.el.addEventListener("click", (e) => {
+                    this.el.addEventListener("mousedown", (e) => {
                         VR_LOG('menu clicked')
                         if (menu_open) {
                             document.querySelectorAll('.menu_plane').forEach(function (e) {
@@ -977,25 +977,25 @@ Exit AR
             var changeTimeToStart = document.getElementById('add');
             var changeTimeToOneSecond = document.getElementById('minus');
 
-            playButton.addEventListener('click', function () {
+            playButton.addEventListener('mousedownk', function () {
                vimeoPlayer.pause();
                vimeoPlayer.play();
             });
 
-            pauseButton.addEventListener('click', function () {
+            pauseButton.addEventListener('mousedown', function () {
                 vimeoPlayer.pause();
             });
 
-            stopButton.addEventListener('click', function () {
+            stopButton.addEventListener('mousedown', function () {
                 vimeoPlayer.player.setTime(0);
                 vimeoPlayer.pause();
             });
 
-            changeTimeToStart.addEventListener('click', function () {
+            changeTimeToStart.addEventListener('mousedown', function () {
                 vimeoPlayer.player.setTime(30);
             });
 
-            changeTimeToOneSecond.addEventListener('click', function () {
+            changeTimeToOneSecond.addEventListener('mousedown', function () {
                 vimeoPlayer.player.setTime(100);
             });
         });
