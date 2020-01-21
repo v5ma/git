@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Silicon Valley Global News: WebXR Magazine vRMA.iO</title>
+    <meta name="description" content="demo">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      body {
+          font-family: helvetica, arial, sans-serif;
+          margin: 2em;
+      }
+
+      h1 {
+          font-size: 1.35em;
+      }
+      div#text {
+          position: absolute;
+          left: 6px; 
+          top: 6px;
+          padding: 6px;
+          max-width: 300px;
+          background-color: rgba(255, 255, 255, 0.7);
+          z-index: 2;
+      }
+      #exitbutton {
+          position: absolute;
+          left: 20px;
+          bottom: 20px;
+          padding: 6px;
+          border: 1px solid rgba(255,255,255,0.5);
+          color: rgba(255,255,255,0.8);
+          background-color: rgba(0,0,0,0.2);
+          display: none;
+          z-index: 2;
+      }
+      body.ar-mode {
+          user-select: none;
+      }
+      body.ar-mode #text,
+      body.ar-mode canvas.a-canvas {
+          display: none;
+      }
+      body.ar-mode #exitbutton {
+          display: initial;
+      }
+    </style>
+    
+    <script>
+      // WebXR requires HTTPS, so the site doesn't work if someone manually enters
+      // the URL and ends up using HTTP. To work around this, force redirect from
+      // http to https for non-localhost addresses.
+      if (window.location.protocol == "http:" &&
+          window.location.hostname != "localhost" && 
+          window.location.hostname != "127.0.0.1" &&
+          window.location.hostname != "[::1]") {
+        window.location = window.location.href.replace('http:', 'https:');        
+      }
+      
+      AFRAME.registerComponent('exit-ar-button', {
+      init: function () {
+        console.log('exit-ar-button init');
+        document.getElementById('exitbutton').addEventListener('click', ev => {
+            console.log('exit-ar-button event ' + ev.type);
+            this.el.sceneEl.renderer.xr.getSession().end();
+        });
+      }
+    })
+    </script>    
+    <script type="text/javascript" src="https://aframe.io/releases/1.0.0/aframe.min.js"></script>
+  
+    <script type="text/javascript" src="/aframe-vimeo-component.min.js"></script>
+    <script type="text/javascript"
+        src="https://unpkg.com/aframe-thumb-controls-component@1.1.0/dist/aframe-thumb-controls-component.min.js">
+    </script>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/gh/n5ro/Micah1.github.io@7022b232989831d0748167999c5ac2998fa0eeb2/scripts/pilaser.js">
+    </script>
+  
+  <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/gh/n5ro/n5ro.github.io@5367d960cf25688af591ab4e3037f13dac5c2a95/touchup.js">
+    </script>
+  
+  
+  <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/gh/n5ro/n5ro.github.io@8a472f6328216140188404701b23889eec718f8a/joystick.js">
+    </script>
+  
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/gh/Micah1/Micah1.github.io@44166e25baea85fa46ae4213182333eff31ef2f2/scripts/turning.js">
+    </script>
+    <script type="text/javascript"
+        src="https://unpkg.com/aframe-event-set-component@^4.0.0/dist/aframe-event-set-component.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/aframe-log-component/dist/aframe-log-component.min.js">
+    </script>
+    <script type="text/javascript"
+        src="https://rawgit.com/fernandojsg/aframe-teleport-controls/master/dist/aframe-teleport-controls.min.js">
+    </script>
+    <script type="text/javascript"
+        src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/super-hands@3.0.0/dist/super-hands.min.js"></script>
+    <script type="text/javascript"
+        src="https://rawgit.com/feiss/aframe-environment-component/master/dist/aframe-environment-component.min.js">
+    </script>
+  
+    <script>
+       AFRAME.registerComponent('hide-in-ar-mode', {
+
+        init: function () {
+          this.el.sceneEl.addEventListener('enter-vr', (ev) => {
+            this.wasVisible = this.el.getAttribute('visible');
+            if (this.el.sceneEl.is('ar-mode')) {
+                this.el.setAttribute('visible', false);
+                document.body.classList.add('ar-mode');
+            }
+          });
+          this.el.sceneEl.addEventListener('exit-vr', (ev) => {
+            if (this.wasVisible) this.el.setAttribute('visible', true);
+              document.body.classList.remove('ar-mode');
+          });
+        }
+      });
+    </script>
+    <script>
+        var eventNames = ["event1", "event2", "event3", "event4", "event5", "event6", "event7", "event8"];
+        var eventNamesIndex = -1;
+        var objectNames = ["objectA", "objectB", "objectC", "objectD", "objectE", "objectF", "objectG", "objectH"];
+        var ectNames = ["jectA", "jectB", "jectC", "jectD", "jectE", "jectF", "jectG", "jectH"];
+        var headLines = ["articleA", "articleB", "articleC", "articleD", "articleE", "articleF", "articleG", "articleH"];
+        var names = objectNames
+                
+        AFRAME.registerComponent("close", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    eventNamesIndex = -1
+                    document.querySelectorAll('.minify').forEach(function (e) {
+                        e.object3D.visible = false
+                        e.object3D.scale.set(0, 0, 0)
+                    });
+                    document.querySelectorAll('.hidemenu').forEach(function (e) {
+                        e.object3D.visible = true
+                        e.object3D.scale.set(1, 1, 1)
+                    });
+
+                });
+            }
+        });
+
+        AFRAME.registerComponent("headers", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    names = headLines
+                    console.log("ectNames", ectNames)
+                    console.log("ventNames", eventNames)
+                    document.querySelectorAll('.minify').forEach(function (e) {
+                        e.object3D.visible = true
+                        e.object3D.scale.set(1, 1, 1)
+                    });
+                    document.querySelectorAll('.hidemenu').forEach(function (e) {
+                        e.object3D.visible = false
+                        e.object3D.scale.set(0, 0, 0)
+                    });
+
+                    document.getElementById('objecttargets').setAttribute('visible', false);
+                    document.getElementById('objectarticles').setAttribute('visible', false);
+                    document.getElementById('headers').setAttribute('visible', true);
+
+
+                });
+            }
+        });
+
+        AFRAME.registerComponent("spheres", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    names = ectNames
+                    console.log("ectNames", ectNames)
+                    console.log("ventNames", eventNames)
+                    document.querySelectorAll('.minify').forEach(function (e) {
+                        e.object3D.visible = true
+                        e.object3D.scale.set(1, 1, 1)
+                    });
+                    document.querySelectorAll('.hidemenu').forEach(function (e) {
+                        e.object3D.visible = false
+                        e.object3D.scale.set(0, 0, 0)
+                    });
+
+
+                    document.getElementById('objecttargets').setAttribute('visible', false);
+                    document.getElementById('objectarticles').setAttribute('visible', true);
+                    document.getElementById('headers').setAttribute('visible', false);
+
+
+                });
+            }
+        });
+
+        AFRAME.registerComponent("articles", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    names = objectNames
+                    console.log("ectNames", ectNames)
+                    console.log("ventNames", eventNames)
+                    document.querySelectorAll('.minify').forEach(function (e) {
+                        e.object3D.visible = true
+                        e.object3D.scale.set(1, 1, 1)
+                    });
+                    document.querySelectorAll('.hidemenu').forEach(function (e) {
+                        e.object3D.visible = false
+                        e.object3D.scale.set(0, 0, 0)
+                    });
+
+                    document.getElementById('objecttargets').setAttribute('visible', true);
+                    document.getElementById('objectarticles').setAttribute('visible', false);
+                    document.getElementById('headers').setAttribute('visible', false);
+
+                });
+            }
+        });
+      
+
+        AFRAME.registerComponent("location", {
+            schema: {
+              offset: {type: 'int'}
+            },
+            init: function () {
+                eventNames.forEach((eventName, i) => {
+                    console.log('Alpha listener for', eventName)
+                    this.el.addEventListener(eventName, (e) => {
+                        let objectName = names[(i + this.data.offset) % eventNames.length]
+                        let name = document.querySelector("#" + objectName);
+                        console.log(eventName)
+                        console.log('objectNames', objectNames, i, objectName)
+                        cloneAttributes(name, this.el)
+                    });
+                })
+
+                function cloneAttributes(name, location) {
+                    console.log('locationA clicked')
+                    let rotation = location.getAttribute('rotation')
+                    name.setAttribute('animation', {
+                        to: {
+                            x: rotation.x,
+                            y: rotation.y,
+                            z: rotation.z
+                        }
+                    })
+                    let position = location.getAttribute('position')
+                    name.setAttribute('animation__2', {
+                        to: {
+                            x: position.x,
+                            y: position.y,
+                            z: position.z
+                        }
+                    })
+                    let scale = location.getAttribute('scale')
+                    name.setAttribute('animation__3', {
+                        to: {
+                            x: scale.x,
+                            y: scale.y,
+                            z: scale.z
+                        }
+                    })
+                    name.emit('moveobject')
+                    console.log('name', name)
+                    console.log(name.setAttribute)
+                }
+            }
+        });
+
+
+
+
+        AFRAME.registerComponent("start", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    eventNamesIndex = 0;
+                    document.getElementById('locationA').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationB').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationC').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationD').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationE').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationu').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationv').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationw').emit(eventNames[eventNamesIndex]);
+
+
+
+
+                });
+            }
+        });
+
+        AFRAME.registerComponent("next", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    eventNamesIndex++;
+                    if (eventNamesIndex > 7) {
+                        eventNamesIndex = 0;
+                    }
+                    document.getElementById('locationA').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationB').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationC').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationD').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationE').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationu').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationv').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationw').emit(eventNames[eventNamesIndex]);
+
+
+
+
+                });
+            }
+        });
+
+
+        AFRAME.registerComponent("prev", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    eventNamesIndex--;
+                    if (eventNamesIndex < 0) {
+                        eventNamesIndex = 7;
+                    }
+                    document.getElementById('locationA').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationB').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationC').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationD').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationE').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationu').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationv').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('locationw').emit(eventNames[eventNamesIndex]);
+
+
+
+                });
+
+            }
+        });
+
+        AFRAME.registerComponent("cyclemenu", {
+            init: function () {
+                this.el.addEventListener("click", (e) => {
+                    eventNamesIndex--;
+                    if (eventNamesIndex < 0) {
+                        eventNamesIndex = 7;
+                    }
+                    document.getElementById('menulocation1').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('menulocation2').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('menulocation3').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('menulocation4').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('menulocation5').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('menulocation6').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('menulocation7').emit(eventNames[eventNamesIndex]);
+                    document.getElementById('menulocation8').emit(eventNames[eventNamesIndex]);
+
+
+
+                });
+
+            }
+        });
+    </script>
+
+  
+  <script>
+  AFRAME.registerComponent("fps-counter", {
+        schema: {
+            enabled: {
+                default: !0
+            },
+            for90fps: {
+                default: !0
+            }
+        },
+        init: function() {
+            return this.data.enabled ? (this.el.setAttribute("text", {
+                align: "center",
+                side: "front"
+            }), void this.el.sceneEl.setAttribute("stats", "")) : void this.el.sceneEl.removeBehavior(this)
+        },
+        tick: function(t, e) {
+            var r, i, o = this;
+            return this.fpsDiv ? (i = parseFloat(this.fpsDiv.innerHTML, 10), this.data.for90fps ? (i < 85 && (r = "yellow"), i < 80 && (r = "orange"), i < 75 && (r = "red")) : 
+                                  (i < 55 && (r = "yellow"), i < 50 && (r = "orange"), i < 45 && (r = "red")), r && (this.el.setAttribute("text", "color", r), setTimeout(function() {
+                o.el.setAttribute("text", "color", "white")
+            }, 500)), void this.el.setAttribute("text", "value", i.toFixed(0))) : void(this.fpsDiv = document.querySelector(".rs-counter-base:nth-child(2) .rs-counter-value"))
+        }
+    })    
+    
+  
+  </script>
+
+    
+  
+    <script>
+        (function () {
+            var carouselindex = 0
+            var log_history = [];
+            var menu_open = false;
+            var MAX_LOGS = null;
+
+            function VR_LOG(data) {
+                log_history.push(JSON.stringify(data));
+                if (MAX_LOGS && log_history.length > MAX_LOGS) {
+                    log_history.shift()
+                }
+                const console = document.getElementById('vr_console');
+                if (console) {
+                    console.setAttribute('value', log_history.join('\n'));
+                }
+            }
+            window.onerror = e => VR_LOG("error" + e);
+            const CLAMP_VELOCITY = 0.01;
+            const MAX_DELTA = 0.2;
+            const EPS = 10e-6;
+            const MAX_WARNINGS = 10;
+            const PI_2 = Math.PI / 2;
+
+            AFRAME.registerComponent("triggerdown", {
+                init: function () {
+                    this.el.addEventListener("triggerdown", (e) => {
+                        VR_LOG('triggerclick')
+                        this.el.emit('thumbupstart')
+
+                    });
+                }
+            });
+
+            AFRAME.registerComponent("menu_plane", {
+                init: function () {
+                    this.el.addEventListener("mouseenter", (e) => {
+                        VR_LOG('catbella')
+
+                    });
+                    this.el.addEventListener("click", (e) => {
+                        VR_LOG('menu clicked')
+                        if (menu_open) {
+                            document.querySelectorAll('.menu_plane').forEach(function (e) {
+                                e.emit('close_the_menu');
+                            });
+                            menu_open = false;
+                        } else {
+                            VR_LOG('menu must close');
+                            document.querySelectorAll('.menu_plane').forEach(function (e) {
+                                e.emit('open_the_menu');
+                            });
+                            menu_open = true;
+                        };
+                    });
+
+                }
+            });
+
+
+            AFRAME.registerComponent('thumb-movement-controls', {
+                init: function () {
+                    this.el.addEventListener('thumbupstart', () => {
+                        VR_LOG('thumbupstart ok');
+                    });
+                    this.el.addEventListener('thumbupend', () => {
+                        VR_LOG('thumbupend ok');
+                    });
+                    this.el.addEventListener('thumbrightstart', () => {
+                        VR_LOG('thumbrightstart ok');
+                        document.querySelector('a-scene').emit("rotateright");
+                    });
+                    this.el.addEventListener('thumbrightend', () => {
+                        VR_LOG('thumbrightend ok');
+                        document.querySelectorAll('.menu_plane').forEach(function (e) {
+                            e.object3D.visible = true;
+                       });
+                    });
+                    this.el.addEventListener('thumbleftstart', () => {
+                        VR_LOG('thumbleftstart ok');
+                        document.querySelector('a-scene').emit("rotateleft");
+
+                    });
+                    this.el.addEventListener('thumbleftend', () => {
+                        VR_LOG('thumbleftend ok');
+                        document.querySelectorAll('.menu_plane').forEach(function (e) {
+                        });
+                    });
+                    this.el.addEventListener('thumbdownstart', () => {
+                        VR_LOG('thumbupstart ok');
+                        document.querySelectorAll('.menu_plane').forEach(function (e) {
+                            e.object3D.visible = false;
+
+                        });
+                    });
+                    this.el.addEventListener('thumbdownend', () => {
+                        VR_LOG('thumbupend ok');
+                    });
+                }
+            });
+
+        })();
+    </script>
+</head>
+
+<body>
+<div id="exitbutton">
+Exit AR
+</div>
+<a-scene joystick
+         raycaster="objects: .clickable; showLine: false;"
+         cursor="rayOrigin: mouse;"
+         >
+       <a-assets>
+        <a-asset-item id="vrtechsolo" response-type="arraybuffer" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2FVRTech%20solo.glb?v=1578391617378"></a-asset-item>
+        <a-asset-item id="cuttyblades" response-type="arraybuffer" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2Fcuttyblades.glb?v=1578391622481"></a-asset-item>
+        <a-asset-item id="selfaware" response-type="arraybuffer" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2Fselfawarenetworks.glb?v=1578391618903"></a-asset-item>
+        <a-asset-item id="webxr" response-type="arraybuffer" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2Fwebxr.glb?v=1578391619519"></a-asset-item>
+        <a-asset-item id="pumpkin" response-type="arraybuffer" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2Fpumpkin.glb?v=1578391620962"></a-asset-item>
+        <a-asset-item id="3Dnews" response-type="arraybuffer" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2F3D%20news.glb?v=1578391621054"></a-asset-item>
+        <a-asset-item id="webxrvrtech" response-type="arraybuffer" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2Fwebxr%20n%20vrtech.glb?v=1578391621412"></a-asset-item>
+        <a-asset-item id="thing" response-type="arraybuffer" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2Fthing.glb?v=1578391622724"></a-asset-item>
+        <a-asset-item id="thedragon" response-type="arraybuffer" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2FTheDragon.glb?v=1578391625308"></a-asset-item>
+        <a-asset-item id="roundbubble" response-type="arraybuffer" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2FVRtechround%20original.glb?v=1578391625108"></a-asset-item>
+        <a-asset-item id="techwordbubble" response-type="arraybuffer" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2FVR%20Tech%20wordbubble1.glb?v=1578391627404"></a-asset-item>
+            <a-asset-item id="terrain" src="/models/terrain.gltf"></a-asset-item>
+            <img id="skymap" src="/images/skymap.jpg" />
+            <img id="checkers" src="https://i.imgur.com/gE99iH1.png">
+            <img id="navy" src="https://i.imgur.com/nI3uM5Z.jpg">
+            <img id="cow" src="https://i.imgur.com/1j84M1w.jpg">
+            <img id="gri" src="https://i.imgur.com/JE0jLfM.jpg">
+            <img id="svgnlogo" src="https://i.imgur.com/rBHb3D2.jpg">
+            <img id="varjo1" src="https://i.imgur.com/9np2MH9.jpg">
+            <img id="varjo2" src="https://i.imgur.com/zTVKIDW.jpg">
+            <img id="varjo3" src="https://i.imgur.com/zb0SDBO.jpg">
+            <img id="varjo4" src="https://i.imgur.com/9np2MH9.jpg">
+            <img id="varjo5" src="https://i.imgur.com/Zbb8Jpk.jpg">
+            <img id="varjo6" src="https://i.imgur.com/Km9aQOO.jpg">
+            <img id="varjo7" src="https://i.imgur.com/Ci3NpSk.jpg">
+            <img id="varjo8" src="https://i.imgur.com/E6zyOxx.jpg">
+            <img id="next" src="https://i.imgur.com/Z23LwCW.jpg">
+            <img id="previous" src="https://i.imgur.com/WTWTzNo.jpg">
+            <img id="exit" src="https://i.imgur.com/hrjUFgp.jpg">
+            <img id="playb" src="https://i.imgur.com/3Hk6Nbi.jpg">
+            <img id="pauseb" src="https://i.imgur.com/trKI27q.jpg">
+            <img id="stopb" src="https://i.imgur.com/D6V86Ui.jpg">
+            <img id="0030" src="https://i.imgur.com/CtV9xsA.jpg">
+            <img id="0100" src="https://i.imgur.com/9gf9dag.jpg">
+            <img id="vrtech1" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2FUntitled_19_02.png?v=1578392951903">
+           <img id="vrtech2" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2FUntitled_20_03.png?v=1578392952239">
+           <img id="vrtech3" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2FUntitled_6_01.png?v=1578392953140">
+           <img id="vrtech4" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2FUntitled_19_04.png?v=1578392953501">
+           <img id="vrtech5" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2FUntitled_19_03.png?v=1578392954308">
+           <img id="vrtech6" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2FUntitled_19_01.png?v=1578392954504">
+           <img id="vrtech7" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2FUntitled_22_01.png?v=1578392954677">
+           <img id="vrtech8" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2FUntitled_21_01.png?v=1578392954858">   
+        </a-assets>
+  
+  <a-entity rotation="0 60 0" position="-1 0 -10" scale="1 1 1" gltf-model="#thedragon"></a-entity>
+  
+
+  <a-entity light="type: ambient; color: white; intensity: 1"></a-entity>
+  <a-entity ground
+      geometry="primitive:box; width:10000; depth:10000; height:0.01;"
+      visible="false"
+      position="0 -0.3 0"
+      >
+    </a-entity>
+  
+  <a-plane position="0 -0.4 0" width="40" height="40" geometry="primitive: plane; width: 10000; height: 10000;"
+            rotation="-90 0 0"
+            material="src: #checkers; repeat: 10000 10000; transparent: true; metalness:0.6; roughness: 0.4; sphericalEnvMap: #sky;" hide-in-ar-mode>
+        </a-plane>
+  <a-entity id="sky" color="#f5feff"
+            geometry="primitive:sphere; radius:100; phiLength:360; phiStart:0; thetaLength:90"
+            material="shader:flat; side:back; height:2048; src:#skymap; width:2048" hide-in-ar-mode></a-entity>
+   <a-entity position="0 5 0" gltf-model="#terrain; repeat: 500 500; transparent: true; metalness:0.6; roughness: 0.4;" hide-in-ar-mode></a-entity>
+
+ 
+
+        <a-entity position="0 0 -2.8">
+            
+          
+            <a-entity class="minify" visible="false">
+                <a-mixin id="animation" animation="property: rotation; dur: 400; begin: moveobject;"
+                    animation__2="property: position; dur: 400; begin: moveobject;"
+                    animation__3="property: scale; dur: 400; begin: moveobject;"></a-mixin>
+                <a-entity id="objecttargets">
+                    <a-entity id="objectA" mixin="animation" scale="0 0 0">
+
+<!--                         <a-box class="clickable" color="green"></a-box>
+                    </a-entity> -->
+                      <a-entity rotation="0 0 0" position="0 -3 0" scale="1.5 1.5 1.5" gltf-model="#cuttyblades"
+                                animation__yoyo="property: rotation; dir: forward; dur: 9000; fill: forwards;
+                                 easing: easeInSine; loop: true; to: 0 360 0; repeat: indefinite;"
+                                ></a-entity>
+                   </a-entity>
+  
+                      
+
+                    <a-entity id="objectB" mixin="animation" scale="0 0 0">
+
+<!--                         <a-entity pla1 class="clickable"
+                            geometry="primitive: plane; side: both; height: 1.65; width: 3; depth: 0.001"
+                            material="src: #cow"
+                            text="font: dejavu; color: black; width: 2.8; wrapCount: 70; value: A long time ago organisms evolved neural networks, these neural networks gave plants the ability to process signals, signal processing is something that a neural network can do in real time.
+  These signal processing neural networks that evolved in plants were not only able to replicate representations of the world, but also to learn from those representations. An incoming signal to a grid of cells became a memory, and a memory became a prediction, a prediction for what might come next based on previous memories of representations of the world that came before.
+  This signal processed data, existing as point clouds of ions in brains, were able to react with the brain in a fractal (like a tree) of feedback loops of nerve activity in the brain, with data from the incoming sensors, sensors such as eyes and ears, traveling through nerves to the thalamus and then into the neocortex and back to the thalamus, in a massive feedback loop. From this learning feedback loop, the organism learns about everything in it’s ecosystem that it encounters and is able to perceive, eventually it learns itself, it become a self aware network.   ">
+                        </a-entity> -->
+                      
+                      
+  <a-entity rotation="0 0 0" position="0 -3 0" scale="3 3 3" gltf-model="#thing"
+            animation__yoyo="property: rotation; dir: forward; dur: 50000; fill: forwards;
+                                 easing: easeInSine; loop: true; to: 0 360 0; repeat: indefinite;"
+            ></a-entity>
+  
+ 
+
+
+                    </a-entity>
+
+                    <a-entity starterblock id="objectC" mixin="animation" scale="0 0 0">
+                    <a-entity rotation="0 60 0" position="0 -0.8 0" scale="1 1 1" gltf-model="#thedragon"
+                              animation__yoyo="property: rotation; dir: forward; dur: 100000; fill: forwards;
+                                 easing: easeInSine; loop: true; to: 0 -1000 0; repeat: indefinite;"
+                              ></a-entity>
+                       
+  
+  
+                      
+<!--                         <a-entity class="clickable"
+                            geometry="primitive: box; side: both; height: 1.65; width: 3; depth: 0.001"
+                            material="color: red" text="font: dejavu; color: black; width: 2.8; wrapCount: 70; value:               investment in new technology by Facebook that brings on board people who worked on sensors at places like Qualcomm.
+  So 1 Vive Focus with two 6dof Motion Controllers (made by a 3rd party) is the price of 2 Oculus Quest devices. (Oculus Quest will retail for $399 and it ships with two 6dof motion controllers) The first of Sony’s iconic portable cassette tape players “The Walkman” went on sale July 1st, 1979 for $150.
+  The first Sony Walkman goes on sale
+  The transistor radio was a technological marvel that put music literally into consumers' hands in the mid-1950s. It was…
+  www.history.com
+  The reason I am thinking about the Walkman is that it was a hit product, way before the ipod came along, before the mp3 player, before the cd-player. To me the Oculus Quest is destined to become a hit product like the Walkman back in 1980. I have an Oculus Go, and if you bring an Oculus Go to a party, a club, or any evening gathering to demo it people love it, it creates immediate good first impressions.
+  By"></a-entity> -->
+                    </a-entity>
+
+                    <a-entity id="objectD" mixin="animation" scale="0 0 0">
+
+                        <a-entity rotation="0 60 0" position="0 -0.5 0" scale="0.5 0.5 0.5" gltf-model="#thedragon" animation__yoyo="property: rotation; dir: forward; dur: 50000; fill: forwards;
+                                 easing: easeInSine; loop: true; to: 0 1000 0; repeat: indefinite;"></a-entity>
+                      
+                                          
+                      
+                       
+
+  
+                    </a-entity>
+
+                    <a-entity id="objectE" mixin="animation" scale="0 0 0">
+<!--                         <a-entity class="clickable"
+                            geometry="primitive: box; side: both; height: 1.65; width: 3; depth: 0.001"
+                            material="color: red"
+                            text="font: dejavu; color: black; width: 2.8; wrapCount: 70; value: expect the Vive Focus to have fewer VR apps.
+  Microsoft did a pretty good job with the Mixed Reality devices but with those you are going to notice that your controllers have a pretty limited field of view even compared to the Oculus Quest.
+  There have been some rumors that the Vive Focus 3rd party controllers would use ultrasound, but that won’t be the case with the first controllers that ship by Finch VR. The Focus controllers created by Finch VR do not use ultrasound and the six dof tracking is accomplished by only the built in accelerometer and gyroscope, the same technology that’s inside a 3dof controller.
+  NOLO-Motion Tracking for VR/AR
+  I have also tried the Nolo VR 6dof tracking and in my humble opinion the Nolo VR product is terrible compared to the high quality experience in the Oculus Quest. The problem is that Nolo VR’s system just has too much lag which for me produced nausea and discomfort. I can’t hope for better than Nolo from any 3rd party controller developer except one:">
+                        </a-entity> -->
+                      <a-entity rotation="0 0 0" position="-0.3 -1.4 0" scale="4.5 4.5 5" gltf-model="#webxr"
+                                animation__yoyo="property: rotation; dir: forward; dur: 50000; fill: forwards;
+                                 easing: easeInSine; loop: true; to: 0 360 0; repeat: indefinite;"
+                                ></a-entity>
+  
+                    </a-entity>
+
+                    <a-entity id="objectF" mixin="animation" scale="0 0 0">
+                      <a-entity class="clickable" 
+                        geometry="primitive: box; side: both; height: 1.65; width: 3; depth: 0.001"
+                        material="src: #vrtech1;">
+                      </a-entity>
+
+                    </a-entity>
+
+                    <a-entity id="objectG" mixin="animation" scale="0 0 0">
+
+<!--                         <a-box class="clickable" material="src: #cow;"></a-box> -->
+                        <a-entity rotation="0 240 0" position="0.6 -2.5 0" scale="5 5 5" gltf-model="#3Dnews"></a-entity>
+  
+                    </a-entity>
+
+                    <a-entity id="objectH" mixin="animation" scale="0 0 0">
+                      <a-entity rotation="0 180 0" position="0 -1 0" scale="3.5 3.5 3.5" gltf-model="#webxrvrtech" 
+                                animation__yoyo="property: rotation; dir: forward; dur: 50000; fill: forwards;
+                                 easing: easeInSine; loop: true; to: 0 1000 0; repeat: indefinite;"
+                                ></a-entity>
+  
+                        
+                        
+                    </a-entity>
+                </a-entity>
+                <a-entity id="locationE" rotation="30 22 -45" scale="0 0 0" position="-3.5 2 -1.5" location="offset: 0">
+                </a-entity>
+                <a-entity id="locationA" rotation="0 45 0" scale="0.5 0.5 0.5" position="-2 2 0" location="offset: 1"></a-entity>
+                <a-entity id="locationB" rotation="0 0 0" scale="1 1 1" position="0 1.6 0" location="offset: 2"></a-entity>
+                <a-entity id="locationC" rotation="0 -45 0" scale="0.5 0.5 0.5" position="2 2 0" location="offset: 3"></a-entity>
+                <a-entity id="locationD" rotation="0 22 -45" scale="0 0 0" position="4 2 -1.5" location="offset: 4"></a-entity>
+                <a-entity id="locationv" rotation="0 22 -45" scale="0 0 0" position="4 2 -1.5" location="offset: 5"></a-entity>
+                <a-entity id="locationu" rotation="0 22 -45" scale="0 0 0" position="4 2 -1.5" location="offset: 6"></a-entity>
+                <a-entity id="locationw" rotation="0 22 -45" scale="0 0 0" position="4 2 -1.5" location="offset: 7"></a-entity>
+                <a-entity id="locationx" rotation="0 22 -45" scale="0 0 0" position="4 2 -1.5" location="offset: 8"></a-entity>
+
+
+                <a-entity id="menulocation1" rotation="30 22 -45" scale="0 0 0" position="-3.5 2 -1.5" menulocation1>
+                </a-entity>
+                <a-entity id="menulocation2" rotation="0 60 0" scale="1 1 1" position="-1.9 1.5 -2.5" menulocation2>
+                </a-entity>
+                <a-entity id="menulocation3" rotation="0 0 0" position="1.9 1.5 -2.5" scale="1 1 1" menulocation3>
+                </a-entity>
+                <a-entity id="menulocation4" rotation="0 -60 0" position="-0.7 2.9 -2.5" scale="1 1 1" menulocation4>
+                </a-entity>
+                <a-entity id="menulocation5" rotation="0 22 -45" position="0.7 2.9 -2.5" scale="1 1 1" menulocation5>
+                </a-entity>
+                <a-entity id="menulocation6" rotation="0 22 -45" position="0.0 1.3 -2.5" scale="2.5 1.9 1"
+                    menulocation6></a-entity>
+                <a-entity id="menulocation7" rotation="0 22 -45" scale="0 0 0" position="4 2 -1.5" menulocation7>
+                </a-entity>
+                <a-entity id="menulocation8" rotation="0 22 -45" scale="0 0 0" position="4 2 -1.5" menulocation8>
+                </a-entity>
+
+                
+                <a-box class="clickable" position="2.2 1 0" rotation="0 45 0" scale="1 0.5 1" material="src: #next" next></a-box>
+                
+            </a-entity>
+
+            <a-entity class="clickable minify" visible="false">
+                
+                 <a-box position="-2.2 1 0" rotation="0 45 0" scale="1 0.5 1" class="clickable" material="src: #previous"  prev></a-box>
+                
+                
+<!--                   <a-box class="clickable" material="src: #next" position="0.75 0.3 0" scale="1.5 0.5 0.5" next></a-box>
+                  
+                  <a-box class="clickable" material="src: #previous" position="-0.75 0.3 0" scale="1.5 0.5 0.5" prev></a-box> -->
+                
+            </a-entity>
+        </a-entity>
+
+        <a-entity position="0 0 -2.8">
+            <a-entity class="minify" visible="false">
+                <a-entity id="objectarticles">
+                    <a-entity id="jectA" class="clickable" mixin="animation" scale="0 0 0">
+                      <a-entity class="clickable" 
+                        geometry="primitive: box; side: both; height: 1.65; width: 3; depth: 0.001"
+                        material="src: #vrtech7;">
+                      </a-entity>
+                        
+                    </a-entity>
+                    <a-entity id="jectB" class="clickable" mixin="animation" scale="0 0 0">
+                        
+                      <a-entity class="clickable" 
+                        geometry="primitive: box; side: both; height: 1.65; width: 3; depth: 0.001"
+                        material="src: #vrtech8;">
+                      </a-entity>
+                    </a-entity>
+                    <a-entity id="jectC" class="clickable" mixin="animation" scale="0 0 0">
+                      <a-entity startplane class="clickable" 
+                        geometry="primitive: box; side: both; height: 1.65; width: 3; depth: 0.001"
+                        material="src: #vrtech1;">
+                      </a-entity>
+  
+                    </a-entity>
+                    <a-entity id="jectD" class="clickable" mixin="animation" scale="0 0 0">
+                      <a-entity class="clickable" 
+                        geometry="primitive: box; side: both; height: 1.65; width: 3; depth: 0.001"
+                        material="src: #vrtech2;">
+                      </a-entity>
+ 
+                    </a-entity>
+                    <a-entity id="jectE" class="clickable" mixin="animation" scale="0 0 0">
+                      <a-entity class="clickable" 
+                        geometry="primitive: box; side: both; height: 1.65; width: 3; depth: 0.001"
+                        material="src: #vrtech3;">
+                      </a-entity>
+  
+                    </a-entity>
+                    <a-entity id="jectF" class="clickable" mixin="animation" scale="0 0 0">
+                      <a-entity class="clickable" 
+                        geometry="primitive: box; side: both; height: 1.65; width: 3; depth: 0.001"
+                        material="src: #vrtech4;">
+                      </a-entity>
+  
+                    </a-entity>
+                    <a-entity id="jectG" class="clickable" mixin="animation" scale="0 0 0">
+                      <a-entity class="clickable" 
+                        geometry="primitive: box; side: both; height: 1.65; width: 3; depth: 0.001"
+                        material="src: #vrtech5;">
+                      </a-entity>
+   
+                    </a-entity>
+                    <a-entity id="jectH" class="clickable" mixin="animation" scale="0 0 0">
+                      <a-entity class="clickable" 
+                        geometry="primitive: box; side: both; height: 1.65; width: 3; depth: 0.001"
+                        material="src: #vrtech6;">
+                      </a-entity>
+  
+                    </a-entity>
+                </a-entity>
+            </a-entity>
+        </a-entity>
+
+        <a-entity position="0 0 -2.8">
+            <a-entity class="minify" visible="false">
+                <a-entity id="headers">
+                  <a-entity id="articleA" class="clickable" mixin="animation" scale="0 0 0">
+                        <a-entity class="clickable"
+                            geometry="primitive: box; side: both; height: 2; width: 3; depth: 0.03"
+                            material="src: #varjo1"
+                            >
+                        </a-entity>
+                  </a-entity>
+                  
+                  <a-entity id="articleB" class="clickable" mixin="animation" scale="0 0 0">
+                        <a-box
+                               geometry="primitive: box; side: both; height: 2; width: 3; depth: 0.03"
+                               material="src: #varjo2"></a-box>
+                  </a-entity>
+                    
+                  <a-entity id="articleC" class="clickable" mixin="animation" scale="0 0 0">
+                        <a-entity class="clickable"
+                            geometry="primitive: box; side: both; height: 2; width: 3; depth: 0.03"
+                            material="src: #varjo3"
+                            >
+                        </a-entity>
+                  </a-entity>
+                  
+                  <a-entity id="articleD" class="clickable" mixin="animation" scale="0 0 0">
+                        <a-entity class="clickable"
+                            geometry="primitive: box; side: both; height: 2; width: 3; depth: 0.03"
+                            material="src: #varjo4"
+                            >
+                        </a-entity>
+                    </a-entity>
+                    <a-entity id="articleE" class="clickable" mixin="animation" scale="0 0 0">
+                        <a-entity class="clickable"
+                            geometry="primitive: box; side: both; height: 2; width: 3; depth: 0.03"
+                            material="src: #varjo5"
+                            >
+                        </a-entity>
+                    </a-entity>
+                    <a-entity id="articleF" class="clickable" mixin="animation" scale="0 0 0">
+                        <a-box geometry="primitive: box; side: both; height: 2; width: 2; depth: 0.03"
+                               material="src: #varjo6"></a-box>
+                    </a-entity>
+                    <a-entity id="articleG" class="clickable" mixin="animation" scale="0 0 0">
+                        <a-box geometry="primitive: box; side: both; height: 2; width: 3; depth: 0.03"
+                               material="src: #varjo7"></a-box>
+                    </a-entity>
+                    <a-entity id="articleH" class="clickable" mixin="animation" scale="0 0 0">
+                        <a-box geometry="primitive: box; side: both; height: 2; width: 3; depth: 0.03"
+                               material="src: #varjo8"></a-box>
+                    </a-entity>
+                </a-entity>
+            </a-entity>
+        </a-entity>
+
+        <a-entity scale="0.2 0.2 0.2" position="-1.65 2.7 -2.5"><a-entity gltf-model="#thedragon" class="clickable hidemenu" side="double" visible="true" color="green" 
+             rotation="0 60 0" text="align: center; width: 3; color: black; height: auto; value: pla1" articles
+            start></a-entity></a-entity>
+  
+   
+
+        <a-plane class="clickable hidemenu" side="double" visible="true" material="src: #svgnlogo" position="1.65 2.9 -2.5"
+            scale="1 1 1" rotation="0 0 0" spheres
+            start></a-plane>
+ 
+
+        <a-plane class="clickable hidemenu" side="double" visible="true" material="src: #varjo1" position="-0.55 2.9 -2.5"
+            scale="1 1 1" rotation="0 0 0" headers
+            start></a-plane>
+
+        <a-entity id="pla4" geometry="primitive: plane; side: both; height: 1; width: 1; depth: 0.001" 
+                  material="src: #vrtech1" class="clickable hidemenu" side="double" visible="true"
+                  position="0.55 2.9 -2.5" scale="1 1 1" rotation="0 0 0" spheres start>
+        </a-entity>
+
+        <a-box id="x" class="clickable minify" visible="false" color="blue" position="0 3.5 -2.5"
+            scale="1 0.5 1" rotation="0 0 0" material="src: #exit"
+            close triggerdown></a-box>
+
+        <a-entity class="clickable hidemenu">
+            <a-entity vimeo="id: 322980501; autoplay: false" id="vimeo-player" autoplay="false" position="0 1.4 -2.8">
+              <a-box id="spectrum" class="clickable" color="#000000" scale="3.2 1.7 1" position="0 0 0">
+              </a-box>
+            </a-entity>
+            <a-entity position="0 0 -2.5">     
+                <a-box id="play" position="-1.6 0 -0.3" scale="0.7 0.7 0.7" class="clickable" material="src: #playb; color: orange"
+                       event-set__enter="_event: mouseenter; color: pink"
+                       event-set__leave="_event: mouseleave; color: orange"
+                       ></a-box>
+                <a-box id="pause" position="0 0 -0.3" scale="0.7 0.7 0.7" class="clickable" material="src: #pauseb; color: teal"
+                       event-set__enter="_event: mouseenter; color: #026fc9"
+                       event-set__leave="_event: mouseleave; color: #4CC3D9"
+                       ></a-box>
+                <a-box id="stop" position="1.6 0 -0.3" scale="0.7 0.7 0.7" class="clickable" material="src: #stopb"
+                       event-set__enter="_event: mouseenter; color: red"
+                       event-set__leave="_event: mouseleave; color: white"
+                       ></a-box>
+                <a-box id="add"  position="-0.8 0 -0.3" scale="0.7 0.7 0.7" class="clickable" material="src: #0030"
+                       event-set__enter="_event: mouseenter; color: teal"
+                       event-set__leave="_event: mouseleave; color: white"
+                       ></a-box>
+                <a-box id="minus" position="0.8 0 -0.3" scale="0.7 0.7 0.7" class="clickable" material="src: #0100"
+                       event-set__enter="_event: mouseenter; color: lightgreen"
+                       event-set__leave="_event: mouseleave; color: white"
+                       ></a-box>
+                
+            </a-entity>
+        </a-entity>
+     
+        <a-entity id="cameraRig">
+
+            <a-entity id="cameraRig_1" character-controller="pivot: #head">
+              
+               <a-entity id="head" camera wasd-controls touch-look-controls position="0 1 0">
+                     <a-entity id="cursor-vr" raycaster="objects: .clickable; showLine: false;" cursor="rayOrigin: mouse;" 
+                               position="0 0 0" geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.016;" material="shader: flat; visible: false; " 
+                               vr-cursor></a-entity>
+                
+              </a-entity>
+                <a-entity
+                   teleport-controls="startEvents: thumbdownstart; endEvents: thumbdownend; cameraRig: #cameraRig;
+                                      teleportOrigin: #head; curveShootingSpeed: 12; collisionEntities: [ground]"
+                   thumb-controls thumb-movement-controls 
+                   my-laser-controls  line="color: white; opacity: 0.75" 
+                   raycaster="objects:.clickable; far: 50">
+               </a-entity>
+      
+               <a-entity daydream-controls vive-focus-controls oculus-go-controls gearvr-controls></a-entity>
+               <a-entity id="left-hand"
+                            vive-controls="hand: left"
+                            oculus-touch-controls="hand: left"
+                            windows-motion-controls="hand: left"
+                            sphere-collider="objects: a-box" super-hands hand-controls="left"
+                            >
+                       <a-text id="vr_console" font="dejavu"
+                               geometry="primitive: plane; width: 0.2; height: 0.7;"
+                               material="side: front; color: #000000"
+                               rotation="0 -90 90" position="-0.1 0 0" 
+                               baseline="bottom" anchor="center" align="left" width="0.2" value="http://vrma.io">
+                      <a-text font="dejavu" position="0.03 -0.01 0.0001" baseline="bottom" anchor="center" align="left" width="0.25"
+                              value="FPS" ></a-text>
+                      <a-text font="dejavu" position="-0.05 -0.01 0.0001" baseline="bottom" anchor="center" align="left" width="0.25" fps-counter></a-text>
+                      <a-text font="dejavu" position="0.03 -0.03 0.0001" baseline="bottom" anchor="center" align="left" width="0.25" value="Silicon Valley Global News"></a-text>
+                      </a-text>
+              
+              
+              </a-entity>
+                <a-entity id="right-hand"
+                            vive-controls="hand: right"
+                            oculus-touch-controls="hand: right"
+                            windows-motion-controls="hand: right"
+                            sphere-collider="objects: a-box" super-hands hand-controls="right"
+                            ></a-entity>
+         </a-entity>
+         </a-entity>
+
+        <a-box scale="4 4 0.1" position="5 1.5 -6.8" material="src: #svgnlogo" class="clickable" color="green"
+               event-set__enter="_event: mouseenter; color: yellow"
+               event-set__leave="_event: mouseleave; color: white"
+               ></a-box>
+
+</a-scene>
+  
+  <script>
+        //Wait until the A-Scene component was loaded before doing anything
+        document.querySelector('#vimeo-player').addEventListener('loaded', function () {
+            var vimeoPlayer = document.querySelector('#vimeo-player').components.vimeo;
+
+            var playButton = document.getElementById('play');
+            var pauseButton = document.getElementById('pause');
+            var stopButton = document.getElementById('stop');
+            // var forward = 
+            
+            var changeTimeToStart = document.getElementById('add');
+            var changeTimeToOneSecond = document.getElementById('minus');
+
+            playButton.addEventListener('click', function () {
+               vimeoPlayer.pause();
+               vimeoPlayer.play();
+            });
+
+            pauseButton.addEventListener('click', function () {
+                vimeoPlayer.pause();
+            });
+
+            stopButton.addEventListener('click', function () {
+                vimeoPlayer.player.setTime(0);
+                vimeoPlayer.pause();
+            });
+
+            changeTimeToStart.addEventListener('click', function () {
+                vimeoPlayer.player.setTime(30);
+            });
+
+            changeTimeToOneSecond.addEventListener('click', function () {
+                vimeoPlayer.player.setTime(100);
+            });
+        });
+    </script>
+</body>
+</html>
