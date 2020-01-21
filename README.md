@@ -1,0 +1,3 @@
+### Hello and welcome to the Vimeo A-Frame component examples 👋🏼 
+ Have a look at our [Getting Started guide](https://github.com/vimeo/aframe-vimeo-component/wiki/Getting-Started-%F0%9F%9A%80), or check out the [full documentation in Github](https://github.com/vimeo/aframe-vimeo-component). 
+ For questions and support, [open a Github issue](https://github.com/vimeo/aframe-vimeo-component/issues/new)
