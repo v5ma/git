@@ -47,28 +47,6 @@
           display: initial;
       }
     </style>
-    
-    <script>
-      // WebXR requires HTTPS, so the site doesn't work if someone manually enters
-      // the URL and ends up using HTTP. To work around this, force redirect from
-      // http to https for non-localhost addresses.
-      if (window.location.protocol == "http:" &&
-          window.location.hostname != "localhost" && 
-          window.location.hostname != "127.0.0.1" &&
-          window.location.hostname != "[::1]") {
-        window.location = window.location.href.replace('http:', 'https:');        
-      }
-      
-      AFRAME.registerComponent('exit-ar-button', {
-      init: function () {
-        console.log('exit-ar-button init');
-        document.getElementById('exitbutton').addEventListener('click', ev => {
-            console.log('exit-ar-button event ' + ev.type);
-            this.el.sceneEl.renderer.xr.getSession().end();
-        });
-      }
-    })
-    </script>    
     <script type="text/javascript" src="https://aframe.io/releases/1.0.0/aframe.min.js"></script>
   
     <script type="text/javascript" src="/aframe-vimeo-component.min.js"></script>
@@ -104,6 +82,27 @@
     <script type="text/javascript"
         src="https://rawgit.com/feiss/aframe-environment-component/master/dist/aframe-environment-component.min.js">
     </script>
+    <script>
+      // WebXR requires HTTPS, so the site doesn't work if someone manually enters
+      // the URL and ends up using HTTP. To work around this, force redirect from
+      // http to https for non-localhost addresses.
+      if (window.location.protocol == "http:" &&
+          window.location.hostname != "localhost" && 
+          window.location.hostname != "127.0.0.1" &&
+          window.location.hostname != "[::1]") {
+        window.location = window.location.href.replace('http:', 'https:');        
+      }
+      
+      AFRAME.registerComponent('exit-ar-button', {
+      init: function () {
+        console.log('exit-ar-button init');
+        document.getElementById('exitbutton').addEventListener('click', ev => {
+            console.log('exit-ar-button event ' + ev.type);
+            this.el.sceneEl.renderer.xr.getSession().end();
+        });
+      }
+    })
+    </script> 
   
     <script>
        AFRAME.registerComponent('hide-in-ar-mode', {
@@ -521,7 +520,7 @@ Exit AR
         <a-asset-item id="roundbubble" response-type="arraybuffer" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2FVRtechround%20original.glb?v=1578391625108"></a-asset-item>
         <a-asset-item id="techwordbubble" response-type="arraybuffer" src="https://cdn.glitch.com/3a2c860e-d7ad-492c-ba6d-c122f2210b97%2FVR%20Tech%20wordbubble1.glb?v=1578391627404"></a-asset-item>
             <a-asset-item id="terrain" src="/models/terrain.gltf"></a-asset-item>
-            <img id="skymap" src="/images/skymap.jpg" />
+            <img id="skymap" src="/assets/images/skymap.jpg" />
             <img id="checkers" src="https://i.imgur.com/gE99iH1.png">
             <img id="navy" src="https://i.imgur.com/nI3uM5Z.jpg">
             <img id="cow" src="https://i.imgur.com/1j84M1w.jpg">
